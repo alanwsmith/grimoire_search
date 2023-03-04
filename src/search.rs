@@ -19,7 +19,7 @@ pub struct Search {
 impl Search {
     pub fn query_search_engine(&mut self) {
         ////////////////////////////////////////////////
-        //// this looks for `env_name` for a crednetails
+        //// this looks for `env_name` for a credentials
         //// to make dev easier. If it doesn't find it,
         //// it uses the `cred_user` and `cred_key`
         //// fields to call out to the system keyring.
@@ -84,9 +84,10 @@ impl Search {
         //
         else if self.params[1].is_empty() == true
         {
-            // NOTE: Skiping creationg of this file
+            // NOTE: Skipping creating of this file
             // since it'll already be there and if not
-            // can be created
+            // can be created. TODO: Move this into
+            // a config at some point
             let history_file_config_path = "/Users/alan/.config/grimoire-mode/search-history.txt";
 
             let history_text = fs::read_to_string(
@@ -143,7 +144,7 @@ impl Search {
                         page.fileName.to_string();
                     ///////////////////////////////////
                     // Filter stuff that shouldn't be
-                    // in the results unless explictly
+                    // in the results unless explicitly
                     // called. Opportunity to move this
                     // into a Vec is high
                     //
@@ -153,6 +154,7 @@ impl Search {
                         String::from("private-"),
                         String::from("self-"),
                         String::from("work-"),
+                        String::from("wrk-"),
                     ];
                     for filter_key in
                         filter_keys.iter()
