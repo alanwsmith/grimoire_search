@@ -1,8 +1,6 @@
-#![allow(unused_variables)]
-#![allow(unreachable_code)]
-#![allow(non_snake_case)]
 use futures::executor::block_on;
 use meilisearch_sdk::client::*;
+use std::fs;
 
 ////////////////////////////////////
 // TODO: Rename params to args
@@ -33,12 +31,9 @@ impl Search {
         let ms_key = get_credentials(
             env_key, cred_key, cred_user,
         );
-
         let client =
             Client::new(ms_url, ms_key.unwrap());
-
         if self.params.len() == 2 {
-            // let holder: Vec<String> = vec![];
             block_on(async move {
                 let my_stuff = client
                     .index("grimoire")
@@ -51,63 +46,14 @@ impl Search {
                     .await
                     .unwrap()
                     .hits;
-                //dbg!(my_stuff);
-
-                // self.search_engine_response =
-                // let tmpthing: Vec<String> =
                 self.search_engine_response = Some(
                     my_stuff
                         .iter()
                         .map(|ya| ya.result.clone())
                         .collect(),
                 );
-
-                // for thing in my_stuff {
-                //     dbg!(thing.result.fileName);
-                //     holder.push(thing.result.fileName);
-                // }
-
-                // if let Ok(thing) = &my_stuff {
-                //     dbg!(thing);
-                //     //     //     println!(
-                //     //     //         "{}",
-                //     //     //         thing
-                //     //     //             .result
-                //     //     //             .fileName
-                //     //     //             .unwrap()
-                //     //     //     );
-                // }
-                // // dbg!("HEREREREERERERER");
-                // self.search_engine_response =
-                //     Some(vec![]);
             });
         }
-
-        // if self.params.len() == 1 {
-        //     println!("Ready...")
-        // }
-        // else if self.params.len() == 2 {
-        //     block_on(async move {
-        //         let my_stuff = client
-        //             .index("grimoire")
-        //             .search()
-        //             .with_limit(14)
-        //             .with_query(
-        //                 &self.params[1].as_str(),
-        //             )
-        //             .execute::<Page>()
-        //             .await;
-        //         // for thing in my_stuff {
-        //         //     println!(
-        //         //         "{}",
-        //         //         thing
-        //         //             .result
-        //         //             .fileName
-        //         //             .unwrap()
-        //         //     );
-        //         // }
-        //     })
-        // }
     }
 }
 
@@ -138,7 +84,30 @@ impl Search {
         //
         else if self.params[1].is_empty() == true
         {
-            vec!["Ready...".to_string()]
+            // NOTE: Skiping creationg of this file
+            // since it'll already be there and if not
+            // can be created
+            let history_file_config_path = "/Users/alan/.config/grimoire-mode/search-history.txt";
+
+            let history_text = fs::read_to_string(
+                history_file_config_path,
+            )
+            .unwrap();
+
+            history_text
+                .lines()
+                .map(|line| line.to_string())
+                .collect::<Vec<String>>()
+
+            // let raw = fs::read_to_string(
+            //     "~/Desktop/tmp.txt",
+            // )
+            // .unwrap();
+
+            // let lines: Vec<&str> =
+            //     raw.lines().collect();
+
+            // vec!["Ready...".to_string()]
         }
         //////////////////////////////////
         // A search term exists so process it.
