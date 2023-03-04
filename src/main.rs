@@ -1,4 +1,3 @@
-#![allow(unused_variables)]
 use grimoire_search::search::Search;
 use std::env;
 
