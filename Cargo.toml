@@ -1,0 +1,13 @@
+[package]
+name = "grimoire_search"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+futures = "0.3.26"
+keyring = "2.0.1"
+meilisearch-sdk = "0.22.0"
+serde = "1.0.152"
+
+[lib]
+doctest = false
