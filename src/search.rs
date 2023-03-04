@@ -1,5 +1,6 @@
 use futures::executor::block_on;
 use meilisearch_sdk::client::*;
+use std::fs;
 
 ////////////////////////////////////
 // TODO: Rename params to args
@@ -83,7 +84,30 @@ impl Search {
         //
         else if self.params[1].is_empty() == true
         {
-            vec!["Ready...".to_string()]
+            // NOTE: Skiping creationg of this file
+            // since it'll already be there and if not
+            // can be created
+            let history_file_config_path = "/Users/alan/.config/grimoire-mode/search-history.txt";
+
+            let history_text = fs::read_to_string(
+                history_file_config_path,
+            )
+            .unwrap();
+
+            history_text
+                .lines()
+                .map(|line| line.to_string())
+                .collect::<Vec<String>>()
+
+            // let raw = fs::read_to_string(
+            //     "~/Desktop/tmp.txt",
+            // )
+            // .unwrap();
+
+            // let lines: Vec<&str> =
+            //     raw.lines().collect();
+
+            // vec!["Ready...".to_string()]
         }
         //////////////////////////////////
         // A search term exists so process it.
