@@ -133,6 +133,13 @@ impl Search {
         if self.params.len() == 1 {
             vec!["Ready...".to_string()]
         }
+        ///////////////////////////////////
+        // Handle empty strings
+        //
+        else if self.params[1].is_empty() == true
+        {
+            vec!["Ready...".to_string()]
+        }
         //////////////////////////////////
         // A search term exists so process it.
         //
