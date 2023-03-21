@@ -26,22 +26,18 @@ impl Search {
         let ms_url = "http://127.0.0.1:7700/";
         let env_key = "MEILISEARCH_TEST";
         let cred_key =
-        "alan--meilisearch--scratchpad--admin-key";
+            "alan--meilisearch--scratchpad--admin-key";
         let cred_user = "alan";
-        let ms_key = get_credentials(
-            env_key, cred_key, cred_user,
-        );
-        let client =
-            Client::new(ms_url, ms_key.unwrap());
+        let ms_key =
+            get_credentials(env_key, cred_key, cred_user);
+        let client = Client::new(ms_url, ms_key.unwrap());
         if self.params.len() == 2 {
             block_on(async move {
                 let my_stuff = client
                     .index("grimoire")
                     .search()
-                    .with_limit(14)
-                    .with_query(
-                        self.params[1].as_str(),
-                    )
+                    .with_limit(10)
+                    .with_query(self.params[1].as_str())
                     .execute::<Page>()
                     .await
                     .unwrap()
@@ -82,8 +78,7 @@ impl Search {
         ///////////////////////////////////
         // Handle empty strings
         //
-        else if self.params[1].is_empty() == true
-        {
+        else if self.params[1].is_empty() == true {
             // NOTE: Skipping creating of this file
             // since it'll already be there and if not
             // can be created. TODO: Move this into
@@ -97,6 +92,7 @@ impl Search {
 
             history_text
                 .lines()
+                .take(10)
                 .map(|line| line.to_string())
                 .collect::<Vec<String>>()
 
@@ -119,10 +115,7 @@ impl Search {
             // ends with a dot in order to tell
             // emacs to create a new file
             //
-            if self.params[1]
-                .chars()
-                .last()
-                .unwrap()
+            if self.params[1].chars().last().unwrap()
                 == '.'
             {
                 vec![self.params[1].to_string()]
@@ -132,8 +125,7 @@ impl Search {
             // from the search engine
             //
             else {
-                let mut results: Vec<String> =
-                    vec![];
+                let mut results: Vec<String> = vec![];
                 'page_loop: for page in self
                     .search_engine_response
                     .as_ref()
@@ -151,20 +143,22 @@ impl Search {
                     let filter_keys = vec![
                         String::from("biz-"),
                         String::from("msync-"),
+                        String::from("neob-"),
                         String::from("private-"),
                         String::from("self-"),
                         String::from("work-"),
                         String::from("wrk-"),
+                        String::from("alans-"),
+                        String::from("alan-"),
+                        String::from("tour-"),
+                        String::from("data-"),
                     ];
-                    for filter_key in
-                        filter_keys.iter()
-                    {
+                    for filter_key in filter_keys.iter() {
                         /////////////////////////////////
                         // TODO: Look up how to do multiple
                         // conditionals
                         //
-                        if file_name
-                            .find(filter_key)
+                        if file_name.find(filter_key)
                             == Some(0)
                         {
                             if self.params[1]
@@ -180,9 +174,8 @@ impl Search {
                     // Add the filename to the result
                     // set if it hasn't been filtered out
                     //
-                    results.push(
-                        page.fileName.to_string(),
-                    );
+                    results
+                        .push(page.fileName.to_string());
                 }
                 results
             }
