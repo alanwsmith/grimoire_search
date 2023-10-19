@@ -106,9 +106,10 @@ fn return_ready_when_no_search_term_is_sent() {
 fn return_string_directly_if_there_is_a_dot_at_the_end(
 ) {
     ////////////////////////////////
-    // Send back anything that ends
-    // with a dot directly so it
-    // can make a new file
+    // Append `org` to anything that
+    // ends with a dot and send
+    // just it back for making new
+    // files. 
     //
     ////////////////////////////////
     // GIVEN
@@ -125,7 +126,7 @@ fn return_string_directly_if_there_is_a_dot_at_the_end(
     // THEN
     //
     assert_eq!(
-        "file name with ending dot.".to_string(),
+        "file name with ending dot.org".to_string(),
         s.filtered_results()[0],
     );
 }
